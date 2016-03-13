@@ -1,31 +1,31 @@
 package akkaTipsAndTricks
 
 /** BookCounter is a set of tools for maintaining the running count of Books.*/
-object BookCounter {
+object WordCounter {
   import scala.collection.immutable.Map
   
-  type Book = String  
+  type Word = String  
   type Count = Int
   
-  type InventoryCounter = Map[Book, Count]
+  type InventoryCounter = Map[Word, Count]
   
-  val emptyCounter : InventoryCounter = Map.empty[Book, Count]
+  val emptyCounter : InventoryCounter = Map.empty[Word, Count]
   
   /**Increments a running counter for the inputed book.*/
   def incrementCounter(counter : InventoryCounter, 
-                       book : Book) : InventoryCounter = 
+                       book : Word) : InventoryCounter = 
     counter.updated(book, counter.getOrElse(book, 0) + 1)
 }
 
 
 /** Akka wrapping of BookCounter functionality. */
 object StreamState {
-  import BookCounter._
+  import WordCounter._
   import akka.stream.scaladsl.Flow
   
   /** A Flow that keeps a running counter of inputed Books.*/
-  val flowCounter : Flow[Book, InventoryCounter, _] = 
-    Flow[Book].scan(emptyCounter)(incrementCounter)
+  val flowCounter : Flow[Word, InventoryCounter, _] = 
+    Flow[Word].scan(emptyCounter)(incrementCounter)
 }
 
 
@@ -38,7 +38,9 @@ object FunctionalState extends App {
   
   import akka.stream.scaladsl.{Source,Sink}
   
-  Source.fromIterator(io.Source.stdin.getLines)
+  def wordsFromStdin() = io.Source.stdin.getLines.map(_.split(' ')).flatten
+  
+  Source.fromIterator(wordsFromStdin)
         .via(StreamState.flowCounter)
         .runWith(Sink foreach println)
         .onComplete(_ => actorSystem.terminate)
