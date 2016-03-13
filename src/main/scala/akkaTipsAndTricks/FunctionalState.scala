@@ -15,19 +15,19 @@ object BookCounter {
   def incrementCounter(counter : InventoryCounter, 
                        book : Book) : InventoryCounter = 
     counter.updated(book, counter.getOrElse(book, 0) + 1)
-}//end object Counter
+}
+
 
 /** Akka wrapping of BookCounter functionality. */
 object StreamState {
   import BookCounter._
   import akka.stream.scaladsl.Flow
   
-  /** A Flow that keeps a running counter of inputed Books.
-   *  @note Flows are usually vals, not defs
-   */
+  /** A Flow that keeps a running counter of inputed Books.*/
   val flowCounter : Flow[Book, InventoryCounter, _] = 
     Flow[Book].scan(emptyCounter)(incrementCounter)
-}//end object StreamState
+}
+
 
 /** App that takes Book titles through stdin and prints the running counters.*/
 object FunctionalState extends App {
@@ -42,4 +42,4 @@ object FunctionalState extends App {
         .via(StreamState.flowCounter)
         .runWith(Sink foreach println)
         .onComplete(_ => actorSystem.terminate())
-}//end object FunctionalState extends App
+}
