@@ -45,7 +45,7 @@ object ActorBasedMicroservices extends App {
   val requestRef = actorSystem actorOf Props[RequestHandlerActor]
   
   val asyncHandler = 
-    Route.asyncHandler(MixActorsWithRoutes.actorRoute(requestRef))
+    Route asyncHandler MixActorsWithRoutes.actorRoute(requestRef)
   
   Http(actorSystem).bindAndHandleAsync(asyncHandler, 
                                        interface="localhost",
