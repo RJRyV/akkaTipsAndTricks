@@ -10,7 +10,6 @@ object BookCounter {
   
   type InventoryCounter = Map[Book, Count]
   
-  /**Creates an empty counter.*/
   val emptyCounter : InventoryCounter = Map.empty[Book, Count]
   
   /**Increments a running counter for the inputed book.*/
