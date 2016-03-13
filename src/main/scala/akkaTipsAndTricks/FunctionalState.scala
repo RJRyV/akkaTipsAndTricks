@@ -38,7 +38,7 @@ object FunctionalState extends App {
   
   import akka.stream.scaladsl.{Source,Sink}
   
-  def wordsFromStdin() = io.Source.stdin.getLines.map(_.split(' ')).flatten
+  def wordsFromStdin() = io.Source.stdin.getLines.map(_.split("\\s+")).flatten
   
   Source.fromIterator(wordsFromStdin)
         .via(StreamState.flowCounter)
