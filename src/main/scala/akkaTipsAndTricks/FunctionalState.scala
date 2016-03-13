@@ -1,9 +1,6 @@
 package akkaTipsAndTricks
 
-/**
- * BookCounter is a collection of tools for maintaining the running count
- * of Books.
- */
+/** BookCounter is a set of tools for maintaining the running count of Books.*/
 object BookCounter {
   //keep imports local
   import scala.collection.immutable.Map
@@ -22,25 +19,19 @@ object BookCounter {
     counter.updated(book, counter.getOrElse(book, 0) + 1)
 }//end object Counter
 
-/**
- * Akka wrapping of BookCounter functionality.
- */
+/** Akka wrapping of BookCounter functionality. */
 object StreamState {
   import BookCounter._
   import akka.stream.scaladsl.Flow
   
-  /**
-   * A Flow that keeps a running counter of inputed Books.
-   * @note Flows are usually vals not defs
+  /** A Flow that keeps a running counter of inputed Books.
+   *  @note Flows are usually vals, not defs
    */
   val flowCounter : Flow[Book, InventoryCounter, _] = 
     Flow[Book].scan(emptyCounter)(incrementCounter)
 }//end object StreamState
 
-/**
- * Application that takes Book titles through stdin and outputs the 
- * running counters of the inputed titles. 
- */
+/** App that takes Book titles through stdin and prints the running counters.*/
 object FunctionalState extends App {
   
   implicit val actorSystem = akka.actor.ActorSystem("FunctionalState")
