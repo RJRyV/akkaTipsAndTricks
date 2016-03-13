@@ -1,6 +1,6 @@
 package akkaTipsAndTricks
 
-/** BookCounter is a set of tools for maintaining the running count of Books.*/
+/** WordCounter is a set of tools for maintaining the running count of words.*/
 object WordCounter {
   import scala.collection.immutable.Map
   
@@ -18,7 +18,7 @@ object WordCounter {
 }
 
 
-/** Akka wrapping of BookCounter functionality. */
+/** Akka wrapping of WordCounter functionality. */
 object StreamState {
   import WordCounter._
   import akka.stream.scaladsl.Flow
@@ -29,7 +29,7 @@ object StreamState {
 }
 
 
-/** App that takes Book titles through stdin and prints the running counters.*/
+/** App that takes words through stdin and prints the running counters.*/
 object FunctionalState extends App {
   
   implicit val actorSystem = akka.actor.ActorSystem("FunctionalState")
