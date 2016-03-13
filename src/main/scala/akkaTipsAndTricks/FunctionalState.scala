@@ -45,8 +45,10 @@ object FunctionalState extends App {
   
   implicit val actorSystem = akka.actor.ActorSystem("FunctionalState")
   implicit val actorMaterializer = akka.stream.ActorMaterializer()
+  import actorSystem.dispatcher
   
   akka.stream.scaladsl.Source.fromIterator(io.Source.stdin.getLines)
                              .via(StreamState.flowCounter)
                              .runForeach(println)
+                             .onComplete(_ => actorSystem.terminate())
 }//end object FunctionalState extends App
