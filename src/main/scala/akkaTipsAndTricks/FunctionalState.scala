@@ -13,7 +13,7 @@ object BookCounter {
   
   type InventoryCounter = immutable.Map[Book, Count]
   
-  /**Creates an empty counter*/
+  /**Creates an empty counter.*/
   val emptyCounter : InventoryCounter = immutable.Map.empty[Book, Count]
   
   /**Increments a running counter for the inputed book.*/
@@ -35,7 +35,6 @@ object StreamState {
    */
   val flowCounter : Flow[Book, InventoryCounter, _] = 
     Flow[Book].scan(emptyCounter)(incrementCounter)
-  
 }//end object StreamState
 
 /**
