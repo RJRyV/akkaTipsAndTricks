@@ -2,7 +2,6 @@ package akkaTipsAndTricks
 
 /** BookCounter is a set of tools for maintaining the running count of Books.*/
 object BookCounter {
-  //keep imports local
   import scala.collection.immutable.Map
   
   type Book = String  
