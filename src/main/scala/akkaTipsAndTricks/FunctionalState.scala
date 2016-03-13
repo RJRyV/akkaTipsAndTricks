@@ -41,5 +41,5 @@ object FunctionalState extends App {
   Source.fromIterator(io.Source.stdin.getLines)
         .via(StreamState.flowCounter)
         .runWith(Sink foreach println)
-        .onComplete(_ => actorSystem.terminate())
+        .onComplete(_ => actorSystem.terminate)
 }
