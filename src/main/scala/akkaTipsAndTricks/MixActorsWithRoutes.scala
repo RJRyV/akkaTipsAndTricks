@@ -17,7 +17,7 @@ import akka.http.scaladsl.Http
  */
 class RequestHandlerActor extends Actor {
   override def receive = {
-    case httpRequest : HttpRequest =>
+    case _ : HttpRequest =>
       sender() ! HttpResponse(entity = "actor responds nicely")
   }
 }
@@ -37,6 +37,7 @@ object MixActorsWithRoutes {
 }
 
 object ActorBasedMicroservices extends App {
+  
   implicit val actorSystem = akka.actor.ActorSystem()
   implicit val actorMaterializer = akka.stream.ActorMaterializer()
   implicit val askTimeout = Timeout(5 seconds)
@@ -49,5 +50,4 @@ object ActorBasedMicroservices extends App {
   Http(actorSystem).bindAndHandleAsync(asyncHandler, 
                                        interface="localhost",
                                        port=42)
-
 }
