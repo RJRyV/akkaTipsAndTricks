@@ -6,15 +6,15 @@ package akkaTipsAndTricks
  */
 object BookCounter {
   //keep imports local
-  import scala.collection.immutable
+  import scala.collection.immutable.Map
   
   type Book = String  
   type Count = Int
   
-  type InventoryCounter = immutable.Map[Book, Count]
+  type InventoryCounter = Map[Book, Count]
   
   /**Creates an empty counter.*/
-  val emptyCounter : InventoryCounter = immutable.Map.empty[Book, Count]
+  val emptyCounter : InventoryCounter = Map.empty[Book, Count]
   
   /**Increments a running counter for the inputed book.*/
   def incrementCounter(counter : InventoryCounter, 
