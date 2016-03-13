@@ -5,7 +5,7 @@ After following the below steps there should be a functional sample project of a
 Prerequisites
 -------------
 
-1. Scala (2.11.4)
+1. Scala (2.11.8)
 2. sbt (0.13.7)
 
 Steps
