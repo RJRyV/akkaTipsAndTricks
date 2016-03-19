@@ -24,8 +24,7 @@ import akka.stream.ClosedShape
     val merge = 
       builder.add(MergePreferred[FileInputType](1, true).named("merge"))
 			
-    val afterMerge = Flow[FileInputType] map {
-			e =>
+    val afterMerge = Flow[FileInputType] map { e =>
 			println("after merge")
 			e
 		}
@@ -77,3 +76,43 @@ object AkkaExtension {
                      .via(Flow[FileInputType] map recursiveRetry)
                      .to(Sink.ignore)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

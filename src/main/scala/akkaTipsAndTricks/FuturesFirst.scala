@@ -23,14 +23,15 @@ object FuturesFirst {
                                   
   //Futures can be chained together in many visually distinct ways
                                   
-  def loginWasAlsoActive(loginId : LoginId, 
-                         date : Date) : Future[(UniqueId, Boolean)] = 
+  def loginWasActive(loginId : LoginId, 
+                     date : Date) : Future[(UniqueId, Boolean)] = 
     for {
       uniqueId  <- dbLookupLoginToUniqueId(loginId)
       wasActive <- authenticatorLookupIdActive(uniqueId, date)
     } yield (uniqueId -> wasActive)
-                                  
-  def loginWasActive(loginId : LoginId, date : Date) : Future[Boolean] = 
+                              
+    
+  def loginWasAlsoActive(loginId : LoginId, date : Date) : Future[Boolean] = 
     dbLookupLoginToUniqueId(loginId).flatMap(authenticatorLookupIdActive(_, date))
     
     
@@ -43,7 +44,7 @@ object FuturesFirst {
   //The allIds.map spawns off as many Futures as there are ids
   //But the return type is a single Future wrapped around an Iterable of results
   val idsActive : Future[Iterable[Boolean]] = 
-    Future.sequence(allIds.map(loginWasActive(_, yesterday)))
+    Future sequence allIds.map(loginId => loginWasAlsoActive(loginId, yesterday))
   
   def bindLoginToUnique(loginId : LoginId) = 
     dbLookupLoginToUniqueId(loginId).map(loginId -> _)
@@ -51,4 +52,41 @@ object FuturesFirst {
   val idsToUniqueIds : Future[Map[LoginId, UniqueId]] = 
     Future.sequence(allIds.map(bindLoginToUnique))
           .map(_.toMap)
+          
+  
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

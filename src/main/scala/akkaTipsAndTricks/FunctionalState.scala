@@ -7,14 +7,14 @@ object WordCounter {
   type Word = String  
   type Count = Int
   
-  type InventoryCounter = Map[Word, Count]
+  type WordCounter = Map[Word, Count]
   
-  val emptyCounter : InventoryCounter = Map.empty[Word, Count]
+  val emptyCounter : WordCounter = Map.empty[Word, Count]
   
   /**Increments a running counter for the inputed book.*/
-  def incrementCounter(counter : InventoryCounter, 
-                       book : Word) : InventoryCounter = 
-    counter.updated(book, counter.getOrElse(book, 0) + 1)
+  def incrementCounter(counter : WordCounter, word : Word) : WordCounter = 
+    counter.updated(word, counter.getOrElse(word, 0) + 1)
+    
 }
 
 
@@ -24,7 +24,7 @@ object StreamState {
   import akka.stream.scaladsl.Flow
   
   /** A Flow that keeps a running counter of inputed Books.*/
-  val flowCounter : Flow[Word, InventoryCounter, _] = 
+  val flowCounter : Flow[Word, WordCounter, _] = 
     Flow[Word].scan(emptyCounter)(incrementCounter)
 }
 
@@ -45,3 +45,49 @@ object FunctionalState extends App {
         .runWith(Sink foreach println)
         .onComplete(_ => actorSystem.terminate)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
