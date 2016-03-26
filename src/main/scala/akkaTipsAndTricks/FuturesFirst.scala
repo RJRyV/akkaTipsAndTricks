@@ -21,30 +21,29 @@ object FuturesFirst {
                                   date : Date) : Future[Boolean]= ???
   
                                   
-  //Futures can be chained together in many visually distinct ways
+  //Monads are easy!
                                   
   def loginWasActive(loginId : LoginId, 
-                     date : Date) : Future[(UniqueId, Boolean)] = 
+                     date : Date) : Future[Boolean] = 
     for {
       uniqueId  <- dbLookupLoginToUniqueId(loginId)
       wasActive <- authenticatorLookupIdActive(uniqueId, date)
-    } yield (uniqueId -> wasActive)
-                              
-    
-  def loginWasAlsoActive(loginId : LoginId, date : Date) : Future[Boolean] = 
-    dbLookupLoginToUniqueId(loginId).flatMap(authenticatorLookupIdActive(_, date))
-    
+    } yield (wasActive)
     
   //Composability is very clean
     
   val allIds : Iterable[LoginId] = ???
   
-  val yesterday = new Date(System.currentTimeMillis()-7*24*60*60*1000)
+  val someDate : Date = ???
   
-  //The allIds.map spawns off as many Futures as there are ids
-  //But the return type is a single Future wrapped around an Iterable of results
-  val idsActive : Future[Iterable[Boolean]] = 
-    Future sequence allIds.map(loginId => loginWasAlsoActive(loginId, yesterday))
+  def loginWasActiveOnDate(loginId : LoginId) : Future[Boolean] = 
+    loginWasActive(loginId,someDate)
+  
+  // Iterable(Future[Boolean], Future[Boolean], Future[Boolean], ...)
+  val allIdsActive : Iterable[Future[Boolean]] = allIds map loginWasActiveOnDate
+    
+  // Future[Iterable(Boolean, Boolean, Boolean, ...)
+  val idsActive : Future[Iterable[Boolean]] = Future sequence allIdsActive
   
   def bindLoginToUnique(loginId : LoginId) = 
     dbLookupLoginToUniqueId(loginId).map(loginId -> _)
@@ -55,6 +54,9 @@ object FuturesFirst {
           
   
 }
+
+
+
 
 
 

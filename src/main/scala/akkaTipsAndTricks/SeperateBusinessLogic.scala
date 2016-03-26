@@ -41,13 +41,15 @@ import akka.stream.ClosedShape
 			case (r, s) => (r + 1, s)
 		}
 			
+    //Flow body contains business logic
     val filterFileInputs = Flow[FileInputType] filter {
 		  case (r, s) => {
 			  println(s"sink ${(r >= 3)} $r")
 				r >= 3
 			}
 		}
-					
+    
+    //Even the structure has business logic			
     fileSource ~> merge ~> afterMerge ~> broadcast ~> filterFileInputs ~> ignore
                   merge <~  toRetry   <~ broadcast
     ClosedShape
@@ -55,9 +57,8 @@ import akka.stream.ClosedShape
 }
 
 
-object SeperateBusinessLogic {
+object SeperateBizLogic {
   type FileInputType = (Int, Array[String])
-
   val emptyInputType = (0, Array.empty[String])
   
   @scala.annotation.tailrec
@@ -69,8 +70,8 @@ object SeperateBusinessLogic {
 }
 
 
-object AkkaExtension {
-  import SeperateBusinessLogic._
+object AkkaBizExtension {
+  import SeperateBizLogic._
   
   val stream = Source.single(emptyInputType) 
                      .via(Flow[FileInputType] map recursiveRetry)

@@ -27,7 +27,7 @@ object MixActorsWithRoutes {
   def internalError(ex : Throwable) = 
     complete((InternalServerError, s"Actor not playing nice: ${ex.getMessage}"))
     
-  def actorRoute(requestRef : ActorRef)(implicit timeout : Timeout) = 
+  def actorRoute(requestRef : ActorRef)(implicit timeout : Timeout) : Route = 
     extractRequest { request =>
       onComplete((requestRef ? request).mapTo[HttpResponse]) {
         case Success(response) => complete(response)
@@ -44,10 +44,54 @@ object ActorBasedMicroservices extends App {
 
   val requestRef = actorSystem actorOf Props[RequestHandlerActor]
   
-  val asyncHandler = 
-    Route asyncHandler MixActorsWithRoutes.actorRoute(requestRef)
+  val route = MixActorsWithRoutes.actorRoute(requestRef)
   
-  Http(actorSystem).bindAndHandleAsync(asyncHandler, 
-                                       interface="localhost",
-                                       port=42)
+  Http(actorSystem).bindAndHandle(route, interface="localhost", port=42)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

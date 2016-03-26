@@ -2,19 +2,18 @@ package akkaTipsAndTricks
 
 /** WordCounter is a set of tools for maintaining the running count of words.*/
 object WordCounter {
-  import scala.collection.immutable.Map
+  import scala.collection.immutable
   
   type Word = String  
   type Count = Int
   
-  type WordCounter = Map[Word, Count]
+  type WordCounter = immutable.Map[Word, Count]
   
-  val emptyCounter : WordCounter = Map.empty[Word, Count]
+  val emptyCounter : WordCounter = immutable.Map.empty[Word, Count]
   
   /**Increments a running counter for the inputed book.*/
   def incrementCounter(counter : WordCounter, word : Word) : WordCounter = 
-    counter.updated(word, counter.getOrElse(word, 0) + 1)
-    
+    counter.updated(word, counter.getOrElse(word, 0) + 1)    
 }
 
 
@@ -43,7 +42,7 @@ object FunctionalState extends App {
   Source.fromIterator(wordsFromStdin)
         .via(StreamState.flowCounter)
         .runWith(Sink foreach println)
-        .onComplete(_ => actorSystem.terminate)
+        .onComplete(_ => actorSystem.terminate())
 }
 
 
